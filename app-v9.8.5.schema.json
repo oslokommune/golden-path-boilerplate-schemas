@@ -1,0 +1,1 @@
+go run schema-generator/main.go app-v9.8.5
