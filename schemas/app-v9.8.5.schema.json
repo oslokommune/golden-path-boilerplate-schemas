@@ -47,10 +47,10 @@
         }
       },
       "required": [
-        "Subdomain",
-        "ApexDomain",
         "Enable",
-        "Internal"
+        "Internal",
+        "Subdomain",
+        "ApexDomain"
       ]
     },
     "AlbHostRouting.ApexDomain": {
