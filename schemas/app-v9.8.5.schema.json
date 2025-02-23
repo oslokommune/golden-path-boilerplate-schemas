@@ -47,10 +47,10 @@
         }
       },
       "required": [
-        "Enable",
-        "Internal",
         "Subdomain",
-        "ApexDomain"
+        "ApexDomain",
+        "Enable",
+        "Internal"
       ]
     },
     "AlbHostRouting.ApexDomain": {
@@ -192,10 +192,10 @@
         "IacGitHubRepo": {}
       },
       "required": [
-        "Enable",
         "AppGitHubRepo",
         "IacGitHubRepo",
-        "AssumableCdRole"
+        "AssumableCdRole",
+        "Enable"
       ]
     },
     "IamForCicd.AppGitHubRepo": {
