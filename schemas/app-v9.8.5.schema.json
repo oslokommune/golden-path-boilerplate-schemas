@@ -47,10 +47,10 @@
         }
       },
       "required": [
-        "Enable",
         "Internal",
         "Subdomain",
-        "ApexDomain"
+        "ApexDomain",
+        "Enable"
       ]
     },
     "AlbHostRouting.ApexDomain": {
@@ -461,8 +461,8 @@
         }
       },
       "required": [
-        "Enable",
-        "DependenciesPaths"
+        "DependenciesPaths",
+        "Enable"
       ]
     },
     "app-data.Terragrunt.DependenciesPaths": {
