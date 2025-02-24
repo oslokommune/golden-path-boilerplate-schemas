@@ -1,4 +1,7 @@
 #!/bin/bash
+# This script populates the /schemas directory in this repo root with with schemas for all the GitHub releases in the
+# golden-path-boilerplate repository.
+
 set -e
 
 # Default configuration
