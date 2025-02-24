@@ -1,5 +1,5 @@
 {
-  "$id": "app-v9.8.5",
+  "$id": "app-v4.4.0",
   "$schema": "https://json-schema.org/draft-07/schema",
   "type": "object",
   "properties": {
@@ -192,10 +192,10 @@
         "IacGitHubRepo": {}
       },
       "required": [
-        "Enable",
         "AppGitHubRepo",
         "IacGitHubRepo",
-        "AssumableCdRole"
+        "AssumableCdRole",
+        "Enable"
       ]
     },
     "IamForCicd.AppGitHubRepo": {

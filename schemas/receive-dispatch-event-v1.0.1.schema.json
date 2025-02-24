@@ -1,0 +1,47 @@
+{
+  "$id": "receive-dispatch-event-v1.0.1",
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "AppName": {
+      "type": "string",
+      "description": "Application name"
+    },
+    "CreatePr": {
+      "type": "boolean",
+      "description": "Environment",
+      "default": false
+    },
+    "DispatchTypes": {
+      "type": "string",
+      "description": "Dispatch types",
+      "default": [
+        "{{ .Environment }}-{{ .AppName }}-image-tag-update"
+      ]
+    },
+    "Environment": {
+      "type": "string",
+      "description": "Environment"
+    },
+    "GpgSign": {
+      "type": "boolean",
+      "description": "Sign commits with GnuPG",
+      "default": true
+    },
+    "ImageMetadataFile": {
+      "type": "string",
+      "description": "Image metadata file",
+      "default": "__gp_config_app_image.auto.tfvars.json"
+    },
+    "MachineUserPatSecretName": {
+      "type": "string",
+      "description": "Secret name for machine user PAT",
+      "default": "PAT_ON_MACHINE_USER_FOR_IMAGE_UPDATE"
+    },
+    "WorkingDirectory": {
+      "type": "string",
+      "description": "Working directory",
+      "default": "stacks/{{ .Environment }}/app-{{ .AppName }}"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "$id": "terraform-on-changed-dirs-v2.0.0",
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "ApplyBranch": {
+      "type": "string",
+      "description": "If changes are detected on this branch, the workflow runs \"terraform apply\". If not, \"terraform plan\" is run.",
+      "default": "main"
+    },
+    "FileTypes": {
+      "type": "string",
+      "description": "File types to watch for changes",
+      "default": [
+        "**.tf",
+        "**.lock.hcl",
+        "**.json"
+      ]
+    },
+    "OnPushBranches": {
+      "type": "string",
+      "description": "On push branches.",
+      "default": [
+        "main"
+      ]
+    },
+    "PostWorkflows": {
+      "type": "object",
+      "default": {}
+    },
+    "Stacks": {
+      "type": "string",
+      "description": "List of stacks to run the action for"
+    },
+    "StacksRootDir": {
+      "type": "string",
+      "description": "Root directory for the stacks"
+    }
+  }
+}
