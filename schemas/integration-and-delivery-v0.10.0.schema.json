@@ -1,0 +1,379 @@
+{
+  "$id": "integration-and-delivery-v0.10.0",
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "AppName": {
+      "type": "string",
+      "description": "Application name"
+    },
+    "Cache": {
+      "type": "object",
+      "description": "Cache configuration.",
+      "default": {
+        "Enable": false
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "Enable"
+      ]
+    },
+    "Cache.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of Cache",
+      "default": false
+    },
+    "Dispatch": {
+      "type": "object",
+      "description": "Dispatch event to another repository after build and push.",
+      "default": {
+        "Enable": false,
+        "IacGitHubOrg": "oslokommune",
+        "IacGitHubRepo": null
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": false
+        },
+        "IacGitHubOrg": {
+          "type": "string",
+          "default": "oslokommune"
+        },
+        "IacGitHubRepo": {}
+      },
+      "required": [
+        "Enable",
+        "IacGitHubRepo",
+        "IacGitHubOrg"
+      ]
+    },
+    "Dispatch.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of Dispatch",
+      "default": false
+    },
+    "Dispatch.IacGitHubOrg": {
+      "type": "string",
+      "description": "Override single parameter of Dispatch",
+      "default": "oslokommune"
+    },
+    "Dispatch.IacGitHubRepo": {
+      "description": "Override single parameter of Dispatch"
+    },
+    "DockerContext": {
+      "type": "string",
+      "description": "Docker build context",
+      "default": "{{ `{{defaultContext}}` }}"
+    },
+    "DockerSecrets": {
+      "type": "object",
+      "description": "Docker secrets",
+      "default": {}
+    },
+    "DockerfilePath": {
+      "type": "string",
+      "description": "Dockerfile path",
+      "default": "Dockerfile"
+    },
+    "Environments": {
+      "type": "string",
+      "description": "Environment configuration.",
+      "default": []
+    },
+    "Ghcr": {
+      "type": "object",
+      "description": "GHCR configuration.",
+      "default": {
+        "Enable": true,
+        "Login": true,
+        "Push": true
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": true
+        },
+        "Login": {
+          "type": "boolean",
+          "default": true
+        },
+        "Push": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "Enable",
+        "Login",
+        "Push"
+      ]
+    },
+    "Ghcr.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of Ghcr",
+      "default": true
+    },
+    "Ghcr.Login": {
+      "type": "boolean",
+      "description": "Override single parameter of Ghcr",
+      "default": true
+    },
+    "Ghcr.Push": {
+      "type": "boolean",
+      "description": "Override single parameter of Ghcr",
+      "default": true
+    },
+    "GitHubEnvironment": {
+      "type": "string",
+      "description": "GitHub environment to run build and dispatch in",
+      "default": "{{ .Environment }}-app-{{ .AppName }}-ecr"
+    },
+    "ImageSecurityScan": {
+      "type": "object",
+      "description": "Scan Docker image for vulnerabilities with Trivy",
+      "default": {
+        "Enable": true,
+        "With": {}
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": true
+        },
+        "With": {
+          "type": "object",
+          "default": {}
+        }
+      },
+      "required": [
+        "Enable",
+        "With"
+      ]
+    },
+    "ImageSecurityScan.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of ImageSecurityScan",
+      "default": true
+    },
+    "ImageSecurityScan.With": {
+      "type": "object",
+      "description": "Override single parameter of ImageSecurityScan",
+      "default": {}
+    },
+    "IntegrationWorkflows": {
+      "type": "object",
+      "default": {
+        "IntegrationTests": {
+          "Description": "Run integration tests",
+          "If": "{{ `${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/release*'}}` }}",
+          "Name": "integration-tests",
+          "NeededBy": [
+            "copy-to-ecr-and-dispatch"
+          ],
+          "Needs": [
+            "docker-build-push"
+          ],
+          "Secrets": {
+            "GHCR_TOKEN": "{{ `${{ secrets.GITHUB_TOKEN }}` }}"
+          },
+          "Uses": "./.github/workflows/test_km_integration.yml",
+          "With": {
+            "image": "{{ `ghcr.io/${{ github.repository }}/km:${{ needs.docker-build-push.outputs.image_version}}` }}"
+          }
+        },
+        "Lychee": {
+          "Description": "Check for broken links with Lychee",
+          "Name": "lychee",
+          "NeededBy": [],
+          "Needs": [],
+          "Secrets": [],
+          "Uses": "./.github/workflows/check_for_broken_links.yml",
+          "With": []
+        },
+        "Markdownlint": {
+          "Description": "Check for Markdown issues with markdownlint",
+          "Name": "markdownlint",
+          "NeededBy": [],
+          "Needs": [],
+          "Secrets": {},
+          "Uses": "./.github/workflows/check_for_markdown_issues.yml",
+          "With": {}
+        },
+        "Vale": {
+          "Description": "Check for prose issues with Vale",
+          "Name": "vale",
+          "NeededBy": [],
+          "Needs": [],
+          "Secrets": [],
+          "Uses": "./.github/workflows/check_for_prose_issues.yml",
+          "With": {
+            "requirements-file": ".github/mkdocs/requirements.txt"
+          }
+        }
+      },
+      "properties": {
+        "IntegrationTests": {
+          "type": "object",
+          "default": {
+            "Description": "Run integration tests",
+            "If": "{{ `${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/release*'}}` }}",
+            "Name": "integration-tests",
+            "NeededBy": [
+              "copy-to-ecr-and-dispatch"
+            ],
+            "Needs": [
+              "docker-build-push"
+            ],
+            "Secrets": {
+              "GHCR_TOKEN": "{{ `${{ secrets.GITHUB_TOKEN }}` }}"
+            },
+            "Uses": "./.github/workflows/test_km_integration.yml",
+            "With": {
+              "image": "{{ `ghcr.io/${{ github.repository }}/km:${{ needs.docker-build-push.outputs.image_version}}` }}"
+            }
+          }
+        },
+        "Lychee": {
+          "type": "object",
+          "default": {
+            "Description": "Check for broken links with Lychee",
+            "Name": "lychee",
+            "NeededBy": [],
+            "Needs": [],
+            "Secrets": [],
+            "Uses": "./.github/workflows/check_for_broken_links.yml",
+            "With": []
+          }
+        },
+        "Markdownlint": {
+          "type": "object",
+          "default": {
+            "Description": "Check for Markdown issues with markdownlint",
+            "Name": "markdownlint",
+            "NeededBy": [],
+            "Needs": [],
+            "Secrets": {},
+            "Uses": "./.github/workflows/check_for_markdown_issues.yml",
+            "With": {}
+          }
+        },
+        "Vale": {
+          "type": "object",
+          "default": {
+            "Description": "Check for prose issues with Vale",
+            "Name": "vale",
+            "NeededBy": [],
+            "Needs": [],
+            "Secrets": [],
+            "Uses": "./.github/workflows/check_for_prose_issues.yml",
+            "With": {
+              "requirements-file": ".github/mkdocs/requirements.txt"
+            }
+          }
+        }
+      },
+      "required": [
+        "Lychee",
+        "IntegrationTests",
+        "Markdownlint",
+        "Vale"
+      ]
+    },
+    "IntegrationWorkflows.IntegrationTests": {
+      "type": "object",
+      "description": "Override single parameter of IntegrationWorkflows",
+      "default": {
+        "Description": "Run integration tests",
+        "If": "{{ `${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/release*'}}` }}",
+        "Name": "integration-tests",
+        "NeededBy": [
+          "copy-to-ecr-and-dispatch"
+        ],
+        "Needs": [
+          "docker-build-push"
+        ],
+        "Secrets": {
+          "GHCR_TOKEN": "{{ `${{ secrets.GITHUB_TOKEN }}` }}"
+        },
+        "Uses": "./.github/workflows/test_km_integration.yml",
+        "With": {
+          "image": "{{ `ghcr.io/${{ github.repository }}/km:${{ needs.docker-build-push.outputs.image_version}}` }}"
+        }
+      }
+    },
+    "IntegrationWorkflows.Lychee": {
+      "type": "object",
+      "description": "Override single parameter of IntegrationWorkflows",
+      "default": {
+        "Description": "Check for broken links with Lychee",
+        "Name": "lychee",
+        "NeededBy": [],
+        "Needs": [],
+        "Secrets": [],
+        "Uses": "./.github/workflows/check_for_broken_links.yml",
+        "With": []
+      }
+    },
+    "IntegrationWorkflows.Markdownlint": {
+      "type": "object",
+      "description": "Override single parameter of IntegrationWorkflows",
+      "default": {
+        "Description": "Check for Markdown issues with markdownlint",
+        "Name": "markdownlint",
+        "NeededBy": [],
+        "Needs": [],
+        "Secrets": {},
+        "Uses": "./.github/workflows/check_for_markdown_issues.yml",
+        "With": {}
+      }
+    },
+    "IntegrationWorkflows.Vale": {
+      "type": "object",
+      "description": "Override single parameter of IntegrationWorkflows",
+      "default": {
+        "Description": "Check for prose issues with Vale",
+        "Name": "vale",
+        "NeededBy": [],
+        "Needs": [],
+        "Secrets": [],
+        "Uses": "./.github/workflows/check_for_prose_issues.yml",
+        "With": {
+          "requirements-file": ".github/mkdocs/requirements.txt"
+        }
+      }
+    },
+    "OnPullRequestPaths": {
+      "type": "string",
+      "description": "On pull request paths.",
+      "default": []
+    },
+    "OnPullRequestTypes": {
+      "type": "string",
+      "description": "On pull request types.",
+      "default": []
+    },
+    "OnPushBranches": {
+      "type": "string",
+      "description": "On push branches.",
+      "default": [
+        "main"
+      ]
+    },
+    "OnPushPaths": {
+      "type": "string",
+      "description": "On push paths.",
+      "default": []
+    },
+    "Runner": {
+      "type": "string",
+      "description": "Github Action Runner",
+      "default": "ubuntu-latest"
+    }
+  }
+}
