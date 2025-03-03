@@ -37,13 +37,13 @@ while [[ $# -gt 0 ]]; do
         exit 1
       fi
       ;;
-    --boilerplate|-b)
+    --boilerplate-dir|-b)
       shift
       if [[ $# -gt 0 ]]; then
         BOILERPLATE_DIR="$1"
         shift
       else
-        echo "Error: --boilerplate requires a directory path"
+        echo "Error: --boilerplate-dir requires a directory path"
         exit 1
       fi
       ;;
@@ -66,11 +66,11 @@ while [[ $# -gt 0 ]]; do
       fi
       ;;
     --help)
-      echo "Usage: $0 --repo OWNER/REPO --boilerplate BOILERPLATE_DIR [options]"
+      echo "Usage: $0 --repo OWNER/REPO --boilerplate-dir BOILERPLATE_DIR [options]"
       echo ""
       echo "Required:"
       echo "  --repo, -r OWNER/REPO          GitHub repository in OWNER/REPO format"
-      echo "  --boilerplate, -b DIRECTORY    Base directory for boilerplate templates"
+      echo "  --boilerplate-dir, -b DIRECTORY    Base directory for boilerplate templates"
       echo ""
       echo "Options:"
       echo "  --output, -o DIRECTORY         Output directory for schema files (default: test)"
@@ -96,7 +96,7 @@ if [[ -z "$REPO" ]]; then
 fi
 
 if [[ -z "$BOILERPLATE_DIR" ]]; then
-  echo "Error: --boilerplate is required"
+  echo "Error: --boilerplate-dir is required"
   echo "Use --help for more information"
   exit 1
 fi
@@ -218,6 +218,7 @@ for i in $(seq 0 $((release_count - 1))); do
   echo "  - Template directory: $dynamic_template_dir"
   echo "  - Release: $tag_name"
   echo "  - Output file: $output_file"
+  echo "Resulting command: schema-generator $dynamic_template_dir $tag_name $output_file"
 
   # Create parent directory for output file if it doesn't exist
   mkdir -p "$(dirname "$output_file")"
