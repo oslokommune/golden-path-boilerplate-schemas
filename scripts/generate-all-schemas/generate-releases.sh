@@ -101,6 +101,66 @@ if [[ -z "$BOILERPLATE_DIR" ]]; then
   exit 1
 fi
 
+# Ensure output directory exists
+mkdir -p "$OUTPUT_DIR"
+
+# Check if we need to process releases in test mode
+if [[ "$TEST_MODE" = true ]]; then
+  # In test mode, check for a single file
+  if [[ -n "$TEST_RELEASE" ]]; then
+    echo "Test mode: Using specified release tag '$TEST_RELEASE'"
+    output_file="$OUTPUT_DIR/$TEST_RELEASE.schema.json"
+    if [[ -f "$output_file" ]]; then
+      echo "⏭️  Skipping - output file already exists: $output_file"
+      exit 0
+    fi
+  else
+    echo "Fetching latest release to check if it exists..."
+    latest_release=$(gh release list --repo "$REPO" --limit 1 --json tagName | jq -r '.[0].tagName')
+    if [[ -n "$latest_release" ]]; then
+      output_file="$OUTPUT_DIR/$latest_release.schema.json"
+      if [[ -f "$output_file" ]]; then
+        echo "⏭️  Skipping - output file for latest release already exists: $output_file"
+        exit 0
+      fi
+    fi
+  fi
+else
+  # For non-test mode, we need to fetch all the releases first to check if any need processing
+  echo "Fetching GitHub releases to check for existing files..."
+  releases=$(gh release list --repo "$REPO" --limit 1000 --json tagName)
+
+  # Check if we got valid JSON
+  if ! echo "$releases" | jq empty 2>/dev/null; then
+    echo "Error: Failed to get releases. Make sure you're authenticated with GitHub CLI."
+    exit 1
+  fi
+
+  release_count=$(echo "$releases" | jq length)
+  echo "Found $release_count releases to check"
+
+  # Check if all output files already exist
+  all_files_exist=true
+  for i in $(seq 0 $((release_count - 1))); do
+    tag_name=$(echo "$releases" | jq -r ".[$i].tagName")
+    output_file="$OUTPUT_DIR/$tag_name.schema.json"
+    if [[ ! -f "$output_file" ]]; then
+      all_files_exist=false
+      echo "File needed: $output_file doesn't exist"
+      break
+    fi
+  done
+
+  if [[ "$all_files_exist" = true ]]; then
+    echo "⏭️  All schema files already exist. Nothing to do."
+    exit 0
+  fi
+fi
+
+echo "Starting to process releases for $REPO"
+echo "Boilerplate base directory: $BOILERPLATE_DIR"
+echo "Output directory: $OUTPUT_DIR"
+
 # Create a unique temporary directory
 TEMP_DIR=$(mktemp -d -t "${REPO//\//-}-releases-XXXXXX")
 if [[ ! "$TEMP_DIR" || ! -d "$TEMP_DIR" ]]; then
@@ -117,12 +177,6 @@ cleanup() {
 # Register cleanup function to run on exit, interruption, or termination
 trap cleanup EXIT INT TERM
 
-# Ensure output directory exists
-mkdir -p "$OUTPUT_DIR"
-
-echo "Starting to process releases for $REPO"
-echo "Boilerplate base directory: $BOILERPLATE_DIR"
-echo "Output directory: $OUTPUT_DIR"
 echo "Working directory: $TEMP_DIR"
 
 # Clone the repository to temp directory
@@ -136,16 +190,14 @@ fi
 cd "$TEMP_DIR"
 
 # Get releases based on mode
-echo "Fetching GitHub releases..."
+echo "Fetching GitHub releases for processing..."
 
 if [[ "$TEST_MODE" = true ]]; then
   if [[ -n "$TEST_RELEASE" ]]; then
-    echo "Test mode: Using specified release tag '$TEST_RELEASE'"
     # Create a JSON array with just the specified release
     releases="[{\"tagName\":\"$TEST_RELEASE\",\"name\":\"$TEST_RELEASE\"}]"
     echo "Processing 1 release (test mode with specified tag)"
   else
-    echo "Test mode: Using latest release"
     # Get only the latest release
     releases=$(gh release list --repo "$REPO" --limit 1 --json tagName,name)
     echo "Processing 1 release (test mode with latest release)"
@@ -172,6 +224,15 @@ for i in $(seq 0 $((release_count - 1))); do
   release_name=$(echo "$releases" | jq -r ".[$i].name")
 
   echo -e "\n===== Processing release: $tag_name ($release_name) ====="
+
+  # Calculate output file path
+  output_file="$(cd - > /dev/null && pwd)/$OUTPUT_DIR/$tag_name.schema.json"
+
+  # Check if output file already exists
+  if [[ -f "$output_file" ]]; then
+    echo "  ⏭️  Skipping $tag_name - output file already exists"
+    continue
+  fi
 
   # Checkout the tag
   echo "Checking out tag: $tag_name"
@@ -212,7 +273,6 @@ for i in $(seq 0 $((release_count - 1))); do
   fi
 
   # Run the command
-  output_file="$(cd - > /dev/null && pwd)/$OUTPUT_DIR/$tag_name.schema.json"
   echo "Running command with:"
   echo "  - Component: $component_name (type: $component_type)"
   echo "  - Template directory: $dynamic_template_dir"
