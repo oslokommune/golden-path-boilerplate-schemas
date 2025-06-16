@@ -1,0 +1,25 @@
+{
+  "$id": "template-tracker-v0.2.0",
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "DockerSecrets": {
+      "type": "object",
+      "description": "Docker secrets",
+      "default": {}
+    },
+    "Environment": {
+      "type": "string",
+      "description": "Environment to run the template for"
+    },
+    "Region": {
+      "type": "string",
+      "description": "AWS region"
+    },
+    "Stacks": {
+      "type": "string",
+      "description": "Stacks to run the template for",
+      "default": []
+    }
+  }
+}
