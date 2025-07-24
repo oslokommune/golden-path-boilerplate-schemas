@@ -1,0 +1,240 @@
+{
+  "$id": "cloudfront-static-website-v0.2.2",
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "AccountId": {
+      "type": "string",
+      "description": "AWS account ID."
+    },
+    "AwsProviderVersion": {
+      "type": "string",
+      "description": "The version of the AWS provider to use",
+      "default": "\u003e= 5.70.0, \u003c 6.0.0"
+    },
+    "DefaultDependenciesPaths": {
+      "type": "string",
+      "description": "Default dependecies paths for terragrunt.\nThis is a experimental feature and should not be used in production.",
+      "default": []
+    },
+    "Environment": {
+      "type": "string",
+      "description": "Environment name."
+    },
+    "IamForCicd": {
+      "type": "object",
+      "description": "Enable IAM roles for CI/CD.",
+      "default": {
+        "Enable": false,
+        "GitHubRepo": null
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": false
+        },
+        "GitHubRepo": {}
+      },
+      "required": [
+        "Enable",
+        "GitHubRepo"
+      ]
+    },
+    "IamForCicd.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of IamForCicd",
+      "default": false
+    },
+    "IamForCicd.GitHubRepo": {
+      "description": "Override single parameter of IamForCicd"
+    },
+    "IncludeLockFile": {
+      "type": "boolean",
+      "description": "Include a Terraform lock file.",
+      "default": false
+    },
+    "Name": {
+      "type": "string",
+      "description": "Name for the CloudFront static website resources"
+    },
+    "Region": {
+      "type": "string",
+      "description": "AWS region.",
+      "default": "eu-west-1"
+    },
+    "S3Backend": {
+      "type": "boolean",
+      "description": "Use S3 as a backend.",
+      "default": true
+    },
+    "StackName": {
+      "type": "string",
+      "description": "Name of Terraform stack."
+    },
+    "Team": {
+      "type": "string",
+      "description": "Team name."
+    },
+    "TerraformVersion": {
+      "type": "string",
+      "description": "The version of Terraform to use.",
+      "default": "\u003e= 1.7.0"
+    },
+    "Terragrunt": {
+      "type": "object",
+      "description": "Enable Terragrunt.\nThis is a experimental feature and should not be used in production.",
+      "default": {
+        "DependenciesPaths": [],
+        "Enable": false
+      },
+      "properties": {
+        "DependenciesPaths": {
+          "default": []
+        },
+        "Enable": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "Enable",
+        "DependenciesPaths"
+      ]
+    },
+    "Terragrunt.DependenciesPaths": {
+      "description": "Override single parameter of Terragrunt",
+      "default": []
+    },
+    "Terragrunt.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of Terragrunt",
+      "default": false
+    },
+    "cloudfront-static-website-data.AccountId": {
+      "type": "string",
+      "description": "AWS account ID."
+    },
+    "cloudfront-static-website-data.AutoForwardLogs": {
+      "type": "object",
+      "description": "Automatically forward any CloudWatch log groups or S3 logs created by this template to Datadog if the current account is integrated with Datadog.",
+      "default": {
+        "Enable": true
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "Enable"
+      ]
+    },
+    "cloudfront-static-website-data.AutoForwardLogs.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of cloudfront-static-website-data.AutoForwardLogs",
+      "default": true
+    },
+    "cloudfront-static-website-data.AwsProviderVersion": {
+      "type": "string",
+      "description": "The version of the AWS provider to use",
+      "default": "\u003e= 5.70.0, \u003c 6.0.0"
+    },
+    "cloudfront-static-website-data.DefaultDependenciesPaths": {
+      "type": "string",
+      "description": "Default dependecies paths for terragrunt.\nThis is a experimental feature and should not be used in production.",
+      "default": []
+    },
+    "cloudfront-static-website-data.Environment": {
+      "type": "string",
+      "description": "Environment name."
+    },
+    "cloudfront-static-website-data.IamForCicd": {
+      "type": "object",
+      "description": "Enable IAM roles for CI/CD.",
+      "default": {
+        "AssumableCdRole": false
+      },
+      "properties": {
+        "AssumableCdRole": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "AssumableCdRole"
+      ]
+    },
+    "cloudfront-static-website-data.IamForCicd.AssumableCdRole": {
+      "type": "boolean",
+      "description": "Override single parameter of cloudfront-static-website-data.IamForCicd",
+      "default": false
+    },
+    "cloudfront-static-website-data.IncludeLockFile": {
+      "type": "boolean",
+      "description": "Include a Terraform lock file.",
+      "default": false
+    },
+    "cloudfront-static-website-data.Name": {
+      "type": "string",
+      "description": "Name for the CloudFront static website data resources"
+    },
+    "cloudfront-static-website-data.Region": {
+      "type": "string",
+      "description": "AWS region.",
+      "default": "eu-west-1"
+    },
+    "cloudfront-static-website-data.S3Backend": {
+      "type": "boolean",
+      "description": "Use S3 as a backend.",
+      "default": true
+    },
+    "cloudfront-static-website-data.StackName": {
+      "type": "string",
+      "description": "Name of Terraform stack."
+    },
+    "cloudfront-static-website-data.Team": {
+      "type": "string",
+      "description": "Team name."
+    },
+    "cloudfront-static-website-data.TerraformVersion": {
+      "type": "string",
+      "description": "The version of Terraform to use.",
+      "default": "\u003e= 1.7.0"
+    },
+    "cloudfront-static-website-data.Terragrunt": {
+      "type": "object",
+      "description": "Enable Terragrunt.\nThis is a experimental feature and should not be used in production.",
+      "default": {
+        "DependenciesPaths": [],
+        "Enable": false
+      },
+      "properties": {
+        "DependenciesPaths": {
+          "default": []
+        },
+        "Enable": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "Enable",
+        "DependenciesPaths"
+      ]
+    },
+    "cloudfront-static-website-data.Terragrunt.DependenciesPaths": {
+      "description": "Override single parameter of cloudfront-static-website-data.Terragrunt",
+      "default": []
+    },
+    "cloudfront-static-website-data.Terragrunt.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of cloudfront-static-website-data.Terragrunt",
+      "default": false
+    }
+  },
+  "required": [
+    "StackName",
+    "cloudfront-static-website-data.StackName"
+  ]
+}
