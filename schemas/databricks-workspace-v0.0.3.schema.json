@@ -1,0 +1,79 @@
+{
+  "$id": "databricks-workspace-v0.0.3",
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "Catalogues": {
+      "type": "string",
+      "description": "List of databricks catalogues to create. Each catalogue will be created as a separate Terraform module. The catalog naming convention will be: {Org}_{Env}_{Confidentiality} (e.g., \"myteam_dev_green\"). Fields: - Org: The organization or team name for the catalog - Env: The environment (e.g., dev, test, prod) - Confidentiality: The data confidentiality level (e.g., green, yellow, red) - Comment: (Optional) A description for the catalog - ExtraSchemas: (Optional) List of additional schema names to create in the catalog - ExtraSchemasComment: (Optional) A comment for the extra schemas\n",
+      "default": [
+        {
+          "Comment": "",
+          "Confidentiality": "",
+          "Env": "",
+          "ExtraSchemas": [],
+          "ExtraSchemasComment": "",
+          "Org": ""
+        }
+      ]
+    },
+    "Databricks": {
+      "type": "object",
+      "default": {
+        "AccountID": "",
+        "AdminUserEmail": "",
+        "Org": "",
+        "WorkspaceName": ""
+      },
+      "properties": {
+        "AccountID": {
+          "type": "string",
+          "default": ""
+        },
+        "AdminUserEmail": {
+          "type": "string",
+          "default": ""
+        },
+        "Org": {
+          "type": "string",
+          "default": ""
+        },
+        "WorkspaceName": {
+          "type": "string",
+          "default": ""
+        }
+      },
+      "required": [
+        "AccountID",
+        "AdminUserEmail",
+        "Org",
+        "WorkspaceName"
+      ]
+    },
+    "Databricks.AccountID": {
+      "type": "string",
+      "description": "Override single parameter of Databricks",
+      "default": ""
+    },
+    "Databricks.AdminUserEmail": {
+      "type": "string",
+      "description": "Override single parameter of Databricks",
+      "default": ""
+    },
+    "Databricks.Org": {
+      "type": "string",
+      "description": "Override single parameter of Databricks",
+      "default": ""
+    },
+    "Databricks.WorkspaceName": {
+      "type": "string",
+      "description": "Override single parameter of Databricks",
+      "default": ""
+    },
+    "TerraformVersion": {
+      "type": "string",
+      "description": "The version of Terraform to use.",
+      "default": "\u003e= 1.10.0"
+    }
+  }
+}
