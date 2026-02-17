@@ -1,0 +1,345 @@
+{
+  "$id": "integration-and-delivery-v0.16.0",
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "AppName": {
+      "type": "string",
+      "description": "Application name"
+    },
+    "Cache": {
+      "type": "object",
+      "description": "Cache configuration.",
+      "default": {
+        "Enable": false
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "Enable"
+      ]
+    },
+    "Cache.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of Cache",
+      "default": false
+    },
+    "Dispatch": {
+      "type": "object",
+      "description": "Dispatch event to another repository after build and push.",
+      "default": {
+        "Enable": false,
+        "IacGitHubOrg": "oslokommune",
+        "IacGitHubRepo": null
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": false
+        },
+        "IacGitHubOrg": {
+          "type": "string",
+          "default": "oslokommune"
+        },
+        "IacGitHubRepo": {}
+      },
+      "required": [
+        "Enable",
+        "IacGitHubRepo",
+        "IacGitHubOrg"
+      ]
+    },
+    "Dispatch.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of Dispatch",
+      "default": false
+    },
+    "Dispatch.IacGitHubOrg": {
+      "type": "string",
+      "description": "Override single parameter of Dispatch",
+      "default": "oslokommune"
+    },
+    "Dispatch.IacGitHubRepo": {
+      "description": "Override single parameter of Dispatch"
+    },
+    "DockerBuildArgs": {
+      "type": "string",
+      "description": "Docker build arguments",
+      "default": []
+    },
+    "DockerContext": {
+      "type": "string",
+      "description": "Docker build context",
+      "default": "."
+    },
+    "DockerPlatforms": {
+      "type": "string",
+      "description": "Docker platforms",
+      "default": []
+    },
+    "DockerSecrets": {
+      "type": "object",
+      "description": "Docker secrets",
+      "default": {}
+    },
+    "DockerTagRules": {
+      "type": "string",
+      "description": "Docker tag rules",
+      "default": []
+    },
+    "DockerfilePath": {
+      "type": "string",
+      "description": "Dockerfile path",
+      "default": "Dockerfile"
+    },
+    "DownloadArtifact": {
+      "type": "object",
+      "default": {}
+    },
+    "Ecr": {
+      "type": "object",
+      "description": "ECR configuration.",
+      "default": {
+        "Enable": true,
+        "Login": true,
+        "Push": true
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": true
+        },
+        "Login": {
+          "type": "boolean",
+          "default": true
+        },
+        "Push": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "Enable",
+        "Login",
+        "Push"
+      ]
+    },
+    "Ecr.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of Ecr",
+      "default": true
+    },
+    "Ecr.Login": {
+      "type": "boolean",
+      "description": "Override single parameter of Ecr",
+      "default": true
+    },
+    "Ecr.Push": {
+      "type": "boolean",
+      "description": "Override single parameter of Ecr",
+      "default": true
+    },
+    "Environments": {
+      "type": "string",
+      "description": "Environment configuration.",
+      "default": []
+    },
+    "FileNameLabel": {
+      "type": "string",
+      "description": "Optional label to include in the workflow filename for generating multiple workflows",
+      "default": ""
+    },
+    "Ghcr": {
+      "type": "object",
+      "description": "GHCR configuration.",
+      "default": {
+        "Enable": true,
+        "Login": true,
+        "Push": true
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": true
+        },
+        "Login": {
+          "type": "boolean",
+          "default": true
+        },
+        "Push": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "Enable",
+        "Login",
+        "Push"
+      ]
+    },
+    "Ghcr.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of Ghcr",
+      "default": true
+    },
+    "Ghcr.Login": {
+      "type": "boolean",
+      "description": "Override single parameter of Ghcr",
+      "default": true
+    },
+    "Ghcr.Push": {
+      "type": "boolean",
+      "description": "Override single parameter of Ghcr",
+      "default": true
+    },
+    "GitHubEnvironment": {
+      "type": "string",
+      "description": "GitHub environment to run build and dispatch in",
+      "default": "{{ .Environment }}-app-{{ .AppName }}-ecr"
+    },
+    "ImageSecurityScan": {
+      "type": "object",
+      "description": "Scan Docker image for vulnerabilities with Trivy",
+      "default": {
+        "Enable": true,
+        "With": {}
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": true
+        },
+        "With": {
+          "type": "object",
+          "default": {}
+        }
+      },
+      "required": [
+        "Enable",
+        "With"
+      ]
+    },
+    "ImageSecurityScan.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of ImageSecurityScan",
+      "default": true
+    },
+    "ImageSecurityScan.With": {
+      "type": "object",
+      "description": "Override single parameter of ImageSecurityScan",
+      "default": {}
+    },
+    "IntegrationWorkflows": {
+      "type": "object",
+      "default": {}
+    },
+    "OnPullRequestPaths": {
+      "type": "string",
+      "description": "On pull request paths.",
+      "default": []
+    },
+    "OnPullRequestTypes": {
+      "type": "string",
+      "description": "On pull request types.",
+      "default": []
+    },
+    "OnPushBranches": {
+      "type": "string",
+      "description": "On push branches.",
+      "default": [
+        "main"
+      ]
+    },
+    "OnPushPaths": {
+      "type": "string",
+      "description": "On push paths.",
+      "default": []
+    },
+    "PostBuildPushAction": {
+      "type": "object",
+      "description": "Configuration for actions after Docker build and push",
+      "default": {
+        "EcsDeploy": {
+          "Enable": false,
+          "IfCondition": "github.ref_name == github.event.repository.default_branch"
+        },
+        "LocalCommit": {
+          "Enable": false,
+          "FilePath": "_config.auto.tfvars.json"
+        },
+        "RepositoryDispatch": {
+          "Enable": false,
+          "IacGitHubOrg": "oslokommune",
+          "IacGitHubRepo": null
+        }
+      },
+      "properties": {
+        "EcsDeploy": {
+          "type": "object",
+          "default": {
+            "Enable": false,
+            "IfCondition": "github.ref_name == github.event.repository.default_branch"
+          }
+        },
+        "LocalCommit": {
+          "type": "object",
+          "default": {
+            "Enable": false,
+            "FilePath": "_config.auto.tfvars.json"
+          }
+        },
+        "RepositoryDispatch": {
+          "type": "object",
+          "default": {
+            "Enable": false,
+            "IacGitHubOrg": "oslokommune",
+            "IacGitHubRepo": null
+          }
+        }
+      },
+      "required": [
+        "LocalCommit",
+        "RepositoryDispatch",
+        "EcsDeploy"
+      ]
+    },
+    "PostBuildPushAction.EcsDeploy": {
+      "type": "object",
+      "description": "Override single parameter of PostBuildPushAction",
+      "default": {
+        "Enable": false,
+        "IfCondition": "github.ref_name == github.event.repository.default_branch"
+      }
+    },
+    "PostBuildPushAction.LocalCommit": {
+      "type": "object",
+      "description": "Override single parameter of PostBuildPushAction",
+      "default": {
+        "Enable": false,
+        "FilePath": "_config.auto.tfvars.json"
+      }
+    },
+    "PostBuildPushAction.RepositoryDispatch": {
+      "type": "object",
+      "description": "Override single parameter of PostBuildPushAction",
+      "default": {
+        "Enable": false,
+        "IacGitHubOrg": "oslokommune",
+        "IacGitHubRepo": null
+      }
+    },
+    "PreBuildWorkflows": {
+      "type": "object",
+      "default": {}
+    },
+    "Runner": {
+      "type": "string",
+      "description": "Github Action Runner",
+      "default": "ubuntu-latest"
+    }
+  }
+}
