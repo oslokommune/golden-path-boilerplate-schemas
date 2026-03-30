@@ -1,0 +1,86 @@
+{
+  "$id": "databricks-workspace-v1.1.2",
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "Catalogues": {
+      "type": "array",
+      "description": "List of databricks catalogues to create. Each catalogue will be created as a separate Terraform module. The catalog naming convention will be: {Org}_{Env}_{Confidentiality} (e.g., \"myteam_dev_green\") for standard catalogs or {Org}_{Env}_utils for the utils catalog. Fields: - Org: The organization or team name for the catalog - Env: The environment (e.g., dev, test, prod) - CatalogType: (Optional) Catalog type. Use \"standard\" (default) or \"utils\" for the shared utils catalog - Confidentiality: The data confidentiality level (e.g., green, yellow, red). Required unless CatalogType is \"utils\" - Comment: (Optional) A description for the catalog - ExtraSchemas: (Optional) List of additional schema names to create in the catalog - ExtraSchemasComment: (Optional) A comment for the extra schemas\n",
+      "default": [
+        {
+          "CatalogType": "standard",
+          "Comment": "",
+          "Confidentiality": "",
+          "Env": "",
+          "ExtraSchemas": [],
+          "ExtraSchemasComment": "",
+          "Org": ""
+        }
+      ]
+    },
+    "Databricks": {
+      "type": "object",
+      "description": "Core Databricks workspace settings.  Fields: - AccountID: Your Databricks account ID - AdminUserEmail: Email of the workspace admin user - Org: Organization or team identifier used for naming resources - WorkspaceName: Name of the Databricks workspace\n",
+      "default": {
+        "AccountID": "",
+        "AdminUserEmail": "",
+        "Org": "",
+        "WorkspaceName": ""
+      },
+      "properties": {
+        "AccountID": {
+          "type": "string",
+          "default": ""
+        },
+        "AdminUserEmail": {
+          "type": "string",
+          "default": ""
+        },
+        "Org": {
+          "type": "string",
+          "default": ""
+        },
+        "WorkspaceName": {
+          "type": "string",
+          "default": ""
+        }
+      },
+      "required": [
+        "AdminUserEmail",
+        "Org",
+        "WorkspaceName",
+        "AccountID"
+      ]
+    },
+    "Databricks.AccountID": {
+      "type": "string",
+      "description": "Override single parameter of Databricks",
+      "default": ""
+    },
+    "Databricks.AdminUserEmail": {
+      "type": "string",
+      "description": "Override single parameter of Databricks",
+      "default": ""
+    },
+    "Databricks.Org": {
+      "type": "string",
+      "description": "Override single parameter of Databricks",
+      "default": ""
+    },
+    "Databricks.WorkspaceName": {
+      "type": "string",
+      "description": "Override single parameter of Databricks",
+      "default": ""
+    },
+    "S3EnforceSecureTransport": {
+      "type": "boolean",
+      "description": "Require HTTPS for all requests to S3 buckets created by this template.",
+      "default": false
+    },
+    "TerraformVersion": {
+      "type": "string",
+      "description": "The version of Terraform to use.",
+      "default": "\u003e= 1.10.0"
+    }
+  }
+}
