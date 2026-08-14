@@ -1,0 +1,351 @@
+{
+  "$id": "networking-v3.4.0",
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "AccountId": {
+      "type": "string",
+      "description": "ID of the AWS account the stack is deployed to. Terraform refuses to run against any other account."
+    },
+    "AwsProviderVersion": {
+      "type": "string",
+      "description": "Version constraint for the `hashicorp/aws` Terraform provider.",
+      "default": "\u003e= 6.0.0, \u003c 7.0.0"
+    },
+    "Environment": {
+      "type": "string",
+      "description": "Environment name (for example `dev` or `prod`), applied as the `Environment` tag on every resource in the stack."
+    },
+    "IamForCicd": {
+      "type": "object",
+      "description": "Deprecated: use the `cicd-common` template instead. `AssumableCdRole` lets the AWS provider assume the environment's CI/CD role, so you can run Terraform locally with the same permissions as the pipeline.",
+      "default": {
+        "AssumableCdRole": false
+      },
+      "properties": {
+        "AssumableCdRole": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "AssumableCdRole"
+      ]
+    },
+    "IamForCicd.AssumableCdRole": {
+      "type": "boolean",
+      "description": "Override single parameter of IamForCicd",
+      "default": false
+    },
+    "IncludeLockFile": {
+      "type": "boolean",
+      "description": "Include a Terraform dependency lock file (`.terraform.lock.hcl`) that pins provider versions.",
+      "default": false
+    },
+    "Region": {
+      "type": "string",
+      "description": "AWS region the stack's resources are created in.",
+      "default": "eu-west-1"
+    },
+    "S3Backend": {
+      "type": "boolean",
+      "description": "Store Terraform state in the environment's S3 state bucket, with state locking. Requires the `remote-state` template to have created the bucket; does not create it. If disabled, state is stored locally.",
+      "default": true
+    },
+    "StackName": {
+      "type": "string",
+      "description": "Name of the Terraform stack, normally the name of the stack's folder in the IaC repository. Determines where the stack's state is stored."
+    },
+    "Team": {
+      "type": "string",
+      "description": "Team name, applied as the `Team` tag on every resource in the stack."
+    },
+    "TerraformVersion": {
+      "type": "string",
+      "description": "Terraform version constraint, set as `required_version` for the stack.",
+      "default": "\u003e= 1.10.0"
+    },
+    "Terragrunt": {
+      "type": "object",
+      "description": "Generate a `terragrunt.hcl` so the stack can be run with Terragrunt instead of plain Terraform. This is an experimental feature and should not be used in production.",
+      "default": {
+        "Enable": false
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "Enable"
+      ]
+    },
+    "Terragrunt.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of Terragrunt",
+      "default": false
+    },
+    "VpcEndpoints": {
+      "type": "object",
+      "description": "Create VPC endpoints, so traffic to the selected AWS services stays inside the VPC instead of going through the NAT gateway and the internet. Each sub-key enables one endpoint. All except `S3` are billed.",
+      "default": {
+        "Dkr": false,
+        "Ecr": false,
+        "Enable": false,
+        "Lambda": false,
+        "Logs": false,
+        "Prometheus": false,
+        "S3": false,
+        "SecretsManager": false,
+        "Sqs": false,
+        "Ssm": false,
+        "SsmMessages": false,
+        "Sts": false,
+        "Xray": false
+      },
+      "properties": {
+        "Dkr": {
+          "type": "boolean",
+          "default": false
+        },
+        "Ecr": {
+          "type": "boolean",
+          "default": false
+        },
+        "Enable": {
+          "type": "boolean",
+          "default": false
+        },
+        "Lambda": {
+          "type": "boolean",
+          "default": false
+        },
+        "Logs": {
+          "type": "boolean",
+          "default": false
+        },
+        "Prometheus": {
+          "type": "boolean",
+          "default": false
+        },
+        "S3": {
+          "type": "boolean",
+          "default": false
+        },
+        "SecretsManager": {
+          "type": "boolean",
+          "default": false
+        },
+        "Sqs": {
+          "type": "boolean",
+          "default": false
+        },
+        "Ssm": {
+          "type": "boolean",
+          "default": false
+        },
+        "SsmMessages": {
+          "type": "boolean",
+          "default": false
+        },
+        "Sts": {
+          "type": "boolean",
+          "default": false
+        },
+        "Xray": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "Lambda",
+        "Enable",
+        "Dkr",
+        "SsmMessages",
+        "Prometheus",
+        "Ssm",
+        "S3",
+        "Xray",
+        "Sts",
+        "Ecr",
+        "Logs",
+        "Sqs",
+        "SecretsManager"
+      ]
+    },
+    "VpcEndpoints.Dkr": {
+      "type": "boolean",
+      "description": "Override single parameter of VpcEndpoints",
+      "default": false
+    },
+    "VpcEndpoints.Ecr": {
+      "type": "boolean",
+      "description": "Override single parameter of VpcEndpoints",
+      "default": false
+    },
+    "VpcEndpoints.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of VpcEndpoints",
+      "default": false
+    },
+    "VpcEndpoints.Lambda": {
+      "type": "boolean",
+      "description": "Override single parameter of VpcEndpoints",
+      "default": false
+    },
+    "VpcEndpoints.Logs": {
+      "type": "boolean",
+      "description": "Override single parameter of VpcEndpoints",
+      "default": false
+    },
+    "VpcEndpoints.Prometheus": {
+      "type": "boolean",
+      "description": "Override single parameter of VpcEndpoints",
+      "default": false
+    },
+    "VpcEndpoints.S3": {
+      "type": "boolean",
+      "description": "Override single parameter of VpcEndpoints",
+      "default": false
+    },
+    "VpcEndpoints.SecretsManager": {
+      "type": "boolean",
+      "description": "Override single parameter of VpcEndpoints",
+      "default": false
+    },
+    "VpcEndpoints.Sqs": {
+      "type": "boolean",
+      "description": "Override single parameter of VpcEndpoints",
+      "default": false
+    },
+    "VpcEndpoints.Ssm": {
+      "type": "boolean",
+      "description": "Override single parameter of VpcEndpoints",
+      "default": false
+    },
+    "VpcEndpoints.SsmMessages": {
+      "type": "boolean",
+      "description": "Override single parameter of VpcEndpoints",
+      "default": false
+    },
+    "VpcEndpoints.Sts": {
+      "type": "boolean",
+      "description": "Override single parameter of VpcEndpoints",
+      "default": false
+    },
+    "VpcEndpoints.Xray": {
+      "type": "boolean",
+      "description": "Override single parameter of VpcEndpoints",
+      "default": false
+    },
+    "VpcFlowLogs": {
+      "type": "object",
+      "description": "Record metadata about the IP traffic in the VPC. Kept for 90 days.",
+      "default": {
+        "Enable": false
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "Enable"
+      ]
+    },
+    "VpcFlowLogs.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of VpcFlowLogs",
+      "default": false
+    },
+    "networking-data.AccountId": {
+      "type": "string",
+      "description": "ID of the AWS account the stack is deployed to. Terraform refuses to run against any other account."
+    },
+    "networking-data.AwsProviderVersion": {
+      "type": "string",
+      "description": "Version constraint for the `hashicorp/aws` Terraform provider.",
+      "default": "\u003e= 6.0.0, \u003c 7.0.0"
+    },
+    "networking-data.Environment": {
+      "type": "string",
+      "description": "Environment name (for example `dev` or `prod`), applied as the `Environment` tag on every resource in the stack."
+    },
+    "networking-data.IamForCicd": {
+      "type": "object",
+      "description": "Deprecated: use the `cicd-common` template instead. `AssumableCdRole` lets the AWS provider assume the environment's CI/CD role, so you can run Terraform locally with the same permissions as the pipeline.",
+      "default": {
+        "AssumableCdRole": false
+      },
+      "properties": {
+        "AssumableCdRole": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "AssumableCdRole"
+      ]
+    },
+    "networking-data.IamForCicd.AssumableCdRole": {
+      "type": "boolean",
+      "description": "Override single parameter of networking-data.IamForCicd",
+      "default": false
+    },
+    "networking-data.IncludeLockFile": {
+      "type": "boolean",
+      "description": "Include a Terraform dependency lock file (`.terraform.lock.hcl`) that pins provider versions.",
+      "default": false
+    },
+    "networking-data.Region": {
+      "type": "string",
+      "description": "AWS region the stack's resources are created in.",
+      "default": "eu-west-1"
+    },
+    "networking-data.S3Backend": {
+      "type": "boolean",
+      "description": "Store Terraform state in the environment's S3 state bucket, with state locking. Requires the `remote-state` template to have created the bucket; does not create it. If disabled, state is stored locally.",
+      "default": true
+    },
+    "networking-data.StackName": {
+      "type": "string",
+      "description": "Name of the Terraform stack, normally the name of the stack's folder in the IaC repository. Determines where the stack's state is stored."
+    },
+    "networking-data.Team": {
+      "type": "string",
+      "description": "Team name, applied as the `Team` tag on every resource in the stack."
+    },
+    "networking-data.TerraformVersion": {
+      "type": "string",
+      "description": "Terraform version constraint, set as `required_version` for the stack.",
+      "default": "\u003e= 1.10.0"
+    },
+    "networking-data.Terragrunt": {
+      "type": "object",
+      "description": "Generate a `terragrunt.hcl` so the stack can be run with Terragrunt instead of plain Terraform. This is an experimental feature and should not be used in production.",
+      "default": {
+        "Enable": false
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "Enable"
+      ]
+    },
+    "networking-data.Terragrunt.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of networking-data.Terragrunt",
+      "default": false
+    }
+  },
+  "required": [
+    "StackName",
+    "networking-data.StackName"
+  ]
+}
