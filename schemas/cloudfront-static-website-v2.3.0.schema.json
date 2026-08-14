@@ -1,0 +1,258 @@
+{
+  "$id": "cloudfront-static-website-v2.3.0",
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "AccountId": {
+      "type": "string",
+      "description": "ID of the AWS account the stack is deployed to. Terraform refuses to run against any other account."
+    },
+    "AppendIndexToDirectories": {
+      "type": "boolean",
+      "description": "Rewrite requests ending in `/` or without a file extension to append `/\u003cRootObject\u003e`, so `/about` serves `about/index.html`. Useful for static site generators that output one `index.html` per directory.",
+      "default": false
+    },
+    "AwsProviderVersion": {
+      "type": "string",
+      "description": "Version constraint for the `hashicorp/aws` Terraform provider.",
+      "default": "\u003e= 6.0.0, \u003c 7.0.0"
+    },
+    "DeploymentPipelineV2": {
+      "type": "object",
+      "description": "Deploy the website with the next-generation deployment pipeline. Replaces `IamForCicd`.",
+      "default": {
+        "Enable": false
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "Enable"
+      ]
+    },
+    "DeploymentPipelineV2.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of DeploymentPipelineV2",
+      "default": false
+    },
+    "Environment": {
+      "type": "string",
+      "description": "Environment name (for example `dev` or `prod`), applied as the `Environment` tag on every resource in the stack."
+    },
+    "ErrorObject": {
+      "type": "string",
+      "description": "The object served with status `404` when a requested file does not exist. Not used when `RedirectAllToIndex` is enabled.",
+      "default": "404.html"
+    },
+    "IamForCicd": {
+      "type": "object",
+      "description": "Deprecated: use `DeploymentPipelineV2` instead. Lets GitHub Actions in the website's repository (`GitHubRepo`, under the `oslokommune` org) deploy the site. The workflow must run in the GitHub environment `\u003cEnvironment\u003e-\u003cName\u003e`.",
+      "default": {
+        "Enable": false,
+        "GitHubRepo": null
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": false
+        },
+        "GitHubRepo": {}
+      },
+      "required": [
+        "GitHubRepo",
+        "Enable"
+      ]
+    },
+    "IamForCicd.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of IamForCicd",
+      "default": false
+    },
+    "IamForCicd.GitHubRepo": {
+      "description": "Override single parameter of IamForCicd"
+    },
+    "IncludeLockFile": {
+      "type": "boolean",
+      "description": "Include a Terraform dependency lock file (`.terraform.lock.hcl`) that pins provider versions.",
+      "default": false
+    },
+    "Name": {
+      "type": "string",
+      "description": "Website name. Used as the subdomain, exposing the site at `https://\u003cName\u003e.\u003cEnvironment\u003e.oslo.systems`."
+    },
+    "RedirectAllToIndex": {
+      "type": "boolean",
+      "description": "Serve `RootObject` with status `200` for every request that does not match a file, instead of the `ErrorObject` error page. Needed for single-page apps with client-side routing.",
+      "default": false
+    },
+    "Region": {
+      "type": "string",
+      "description": "AWS region the stack's resources are created in.",
+      "default": "eu-west-1"
+    },
+    "RootObject": {
+      "type": "string",
+      "description": "The object served when the site root (`/`) is requested. Also the object that `RedirectAllToIndex` and `AppendIndexToDirectories` rewrite requests to.",
+      "default": "index.html"
+    },
+    "S3Backend": {
+      "type": "boolean",
+      "description": "Store Terraform state in the environment's S3 state bucket, with state locking. Requires the `remote-state` template to have created the bucket; does not create it. If disabled, state is stored locally.",
+      "default": true
+    },
+    "StackName": {
+      "type": "string",
+      "description": "Name of the Terraform stack, normally the name of the stack's folder in the IaC repository. Determines where the stack's state is stored."
+    },
+    "Team": {
+      "type": "string",
+      "description": "Team name, applied as the `Team` tag on every resource in the stack."
+    },
+    "TerraformVersion": {
+      "type": "string",
+      "description": "Terraform version constraint, set as `required_version` for the stack.",
+      "default": "\u003e= 1.10.0"
+    },
+    "Terragrunt": {
+      "type": "object",
+      "description": "Generate a `terragrunt.hcl` so the stack can be run with Terragrunt instead of plain Terraform. This is an experimental feature and should not be used in production.",
+      "default": {
+        "Enable": false
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "Enable"
+      ]
+    },
+    "Terragrunt.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of Terragrunt",
+      "default": false
+    },
+    "cloudfront-static-website-data.AccountId": {
+      "type": "string",
+      "description": "ID of the AWS account the stack is deployed to. Terraform refuses to run against any other account."
+    },
+    "cloudfront-static-website-data.AutoForwardLogs": {
+      "type": "object",
+      "description": "Automatically forward any CloudWatch log groups or S3 logs created by this template to Datadog if the current account is integrated with Datadog (via the `datadog-common` template).",
+      "default": {
+        "Enable": true
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "Enable"
+      ]
+    },
+    "cloudfront-static-website-data.AutoForwardLogs.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of cloudfront-static-website-data.AutoForwardLogs",
+      "default": true
+    },
+    "cloudfront-static-website-data.AwsProviderVersion": {
+      "type": "string",
+      "description": "Version constraint for the `hashicorp/aws` Terraform provider.",
+      "default": "\u003e= 6.24.0, \u003c 7.0.0"
+    },
+    "cloudfront-static-website-data.Environment": {
+      "type": "string",
+      "description": "Environment name (for example `dev` or `prod`), applied as the `Environment` tag on every resource in the stack."
+    },
+    "cloudfront-static-website-data.IamForCicd": {
+      "type": "object",
+      "description": "Deprecated: use the `cicd-common` template instead. `AssumableCdRole` lets the AWS provider assume the environment's CI/CD role, so you can run Terraform locally with the same permissions as the pipeline.",
+      "default": {
+        "AssumableCdRole": false
+      },
+      "properties": {
+        "AssumableCdRole": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "AssumableCdRole"
+      ]
+    },
+    "cloudfront-static-website-data.IamForCicd.AssumableCdRole": {
+      "type": "boolean",
+      "description": "Override single parameter of cloudfront-static-website-data.IamForCicd",
+      "default": false
+    },
+    "cloudfront-static-website-data.IncludeLockFile": {
+      "type": "boolean",
+      "description": "Include a Terraform dependency lock file (`.terraform.lock.hcl`) that pins provider versions.",
+      "default": false
+    },
+    "cloudfront-static-website-data.Name": {
+      "type": "string",
+      "description": "Name for the CloudFront static website data resources"
+    },
+    "cloudfront-static-website-data.Region": {
+      "type": "string",
+      "description": "AWS region the stack's resources are created in.",
+      "default": "eu-west-1"
+    },
+    "cloudfront-static-website-data.S3Backend": {
+      "type": "boolean",
+      "description": "Store Terraform state in the environment's S3 state bucket, with state locking. Requires the `remote-state` template to have created the bucket; does not create it. If disabled, state is stored locally.",
+      "default": true
+    },
+    "cloudfront-static-website-data.S3EnforceSecureTransport": {
+      "type": "boolean",
+      "description": "Require HTTPS for all requests to S3 buckets created by this template.",
+      "default": false
+    },
+    "cloudfront-static-website-data.StackName": {
+      "type": "string",
+      "description": "Name of the Terraform stack, normally the name of the stack's folder in the IaC repository. Determines where the stack's state is stored."
+    },
+    "cloudfront-static-website-data.Team": {
+      "type": "string",
+      "description": "Team name, applied as the `Team` tag on every resource in the stack."
+    },
+    "cloudfront-static-website-data.TerraformVersion": {
+      "type": "string",
+      "description": "Terraform version constraint, set as `required_version` for the stack.",
+      "default": "\u003e= 1.10.0"
+    },
+    "cloudfront-static-website-data.Terragrunt": {
+      "type": "object",
+      "description": "Generate a `terragrunt.hcl` so the stack can be run with Terragrunt instead of plain Terraform. This is an experimental feature and should not be used in production.",
+      "default": {
+        "Enable": false
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "Enable"
+      ]
+    },
+    "cloudfront-static-website-data.Terragrunt.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of cloudfront-static-website-data.Terragrunt",
+      "default": false
+    }
+  },
+  "required": [
+    "StackName",
+    "cloudfront-static-website-data.StackName"
+  ]
+}
