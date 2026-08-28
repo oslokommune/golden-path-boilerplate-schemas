@@ -1,0 +1,256 @@
+{
+  "$id": "load-balancing-alb-v5.4.1",
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "AccountId": {
+      "type": "string",
+      "description": "ID of the AWS account the stack is deployed to. Terraform refuses to run against any other account."
+    },
+    "AwsProviderVersion": {
+      "type": "string",
+      "description": "Version constraint for the `hashicorp/aws` Terraform provider.",
+      "default": "\u003e= 6.0.0, \u003c 7.0.0"
+    },
+    "Dns": {
+      "type": "object",
+      "description": "DNS and TLS for the ALB. `Enable` points `\u003cEnvironment\u003e.oslo.systems` (created by the `dns` template) at the ALB. `EnableHttps` serves HTTPS on that domain and redirects all HTTP requests to HTTPS; when disabled, the ALB serves plain HTTP instead. `EnableIPv6` makes the ALB reachable over IPv6.",
+      "default": {
+        "Enable": true,
+        "EnableHttps": true,
+        "EnableIPv6": false
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": true
+        },
+        "EnableHttps": {
+          "type": "boolean",
+          "default": true
+        },
+        "EnableIPv6": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "Enable",
+        "EnableHttps",
+        "EnableIPv6"
+      ]
+    },
+    "Dns.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of Dns",
+      "default": true
+    },
+    "Dns.EnableHttps": {
+      "type": "boolean",
+      "description": "Override single parameter of Dns",
+      "default": true
+    },
+    "Dns.EnableIPv6": {
+      "type": "boolean",
+      "description": "Override single parameter of Dns",
+      "default": false
+    },
+    "Environment": {
+      "type": "string",
+      "description": "Environment name (for example `dev` or `prod`), applied as the `Environment` tag on every resource in the stack."
+    },
+    "IamForCicd": {
+      "type": "object",
+      "description": "Deprecated: use the `cicd-common` template instead. `AssumableCdRole` lets the AWS provider assume the environment's CI/CD role, so you can run Terraform locally with the same permissions as the pipeline.",
+      "default": {
+        "AssumableCdRole": false
+      },
+      "properties": {
+        "AssumableCdRole": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "AssumableCdRole"
+      ]
+    },
+    "IamForCicd.AssumableCdRole": {
+      "type": "boolean",
+      "description": "Override single parameter of IamForCicd",
+      "default": false
+    },
+    "IncludeLockFile": {
+      "type": "boolean",
+      "description": "Include a Terraform dependency lock file (`.terraform.lock.hcl`) that pins provider versions.",
+      "default": false
+    },
+    "Internal": {
+      "type": "boolean",
+      "description": "Make the ALB internal, so it is only reachable from inside the VPC. If false, the ALB is internet-facing.",
+      "default": true
+    },
+    "Name": {
+      "type": "string",
+      "description": "Load balancer name, used to name the ALB and related resources.",
+      "default": "main"
+    },
+    "Region": {
+      "type": "string",
+      "description": "AWS region the stack's resources are created in.",
+      "default": "eu-west-1"
+    },
+    "S3Backend": {
+      "type": "boolean",
+      "description": "Store Terraform state in the environment's S3 state bucket, with state locking. Requires the `remote-state` template to have created the bucket; does not create it. If disabled, state is stored locally.",
+      "default": true
+    },
+    "StackName": {
+      "type": "string",
+      "description": "Name of the Terraform stack, normally the name of the stack's folder in the IaC repository. Determines where the stack's state is stored."
+    },
+    "Team": {
+      "type": "string",
+      "description": "Team name, applied as the `Team` tag on every resource in the stack."
+    },
+    "TerraformVersion": {
+      "type": "string",
+      "description": "Terraform version constraint, set as `required_version` for the stack.",
+      "default": "\u003e= 1.10.0"
+    },
+    "Terragrunt": {
+      "type": "object",
+      "description": "Generate a `terragrunt.hcl` so the stack can be run with Terragrunt instead of plain Terraform. This is an experimental feature and should not be used in production.",
+      "default": {
+        "Enable": false
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "Enable"
+      ]
+    },
+    "Terragrunt.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of Terragrunt",
+      "default": false
+    },
+    "load-balancing-alb-data.AccountId": {
+      "type": "string",
+      "description": "ID of the AWS account the stack is deployed to. Terraform refuses to run against any other account."
+    },
+    "load-balancing-alb-data.AutoForwardLogs": {
+      "type": "object",
+      "description": "Automatically forward any CloudWatch log groups or S3 logs created by this template to Datadog if the current account is integrated with Datadog (via the `datadog-common` template).",
+      "default": {
+        "Enable": true
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "Enable"
+      ]
+    },
+    "load-balancing-alb-data.AutoForwardLogs.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of load-balancing-alb-data.AutoForwardLogs",
+      "default": true
+    },
+    "load-balancing-alb-data.AwsProviderVersion": {
+      "type": "string",
+      "description": "Version constraint for the `hashicorp/aws` Terraform provider.",
+      "default": "\u003e= 6.0.0, \u003c 7.0.0"
+    },
+    "load-balancing-alb-data.Environment": {
+      "type": "string",
+      "description": "Environment name (for example `dev` or `prod`), applied as the `Environment` tag on every resource in the stack."
+    },
+    "load-balancing-alb-data.IamForCicd": {
+      "type": "object",
+      "description": "Deprecated: use the `cicd-common` template instead. `AssumableCdRole` lets the AWS provider assume the environment's CI/CD role, so you can run Terraform locally with the same permissions as the pipeline.",
+      "default": {
+        "AssumableCdRole": false
+      },
+      "properties": {
+        "AssumableCdRole": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "AssumableCdRole"
+      ]
+    },
+    "load-balancing-alb-data.IamForCicd.AssumableCdRole": {
+      "type": "boolean",
+      "description": "Override single parameter of load-balancing-alb-data.IamForCicd",
+      "default": false
+    },
+    "load-balancing-alb-data.IncludeLockFile": {
+      "type": "boolean",
+      "description": "Include a Terraform dependency lock file (`.terraform.lock.hcl`) that pins provider versions.",
+      "default": false
+    },
+    "load-balancing-alb-data.Region": {
+      "type": "string",
+      "description": "AWS region the stack's resources are created in.",
+      "default": "eu-west-1"
+    },
+    "load-balancing-alb-data.S3Backend": {
+      "type": "boolean",
+      "description": "Store Terraform state in the environment's S3 state bucket, with state locking. Requires the `remote-state` template to have created the bucket; does not create it. If disabled, state is stored locally.",
+      "default": true
+    },
+    "load-balancing-alb-data.S3EnforceSecureTransport": {
+      "type": "boolean",
+      "description": "Require HTTPS for all requests to S3 buckets created by this template.",
+      "default": true
+    },
+    "load-balancing-alb-data.StackName": {
+      "type": "string",
+      "description": "Name of the Terraform stack, normally the name of the stack's folder in the IaC repository. Determines where the stack's state is stored."
+    },
+    "load-balancing-alb-data.Team": {
+      "type": "string",
+      "description": "Team name, applied as the `Team` tag on every resource in the stack."
+    },
+    "load-balancing-alb-data.TerraformVersion": {
+      "type": "string",
+      "description": "Terraform version constraint, set as `required_version` for the stack.",
+      "default": "\u003e= 1.10.0"
+    },
+    "load-balancing-alb-data.Terragrunt": {
+      "type": "object",
+      "description": "Generate a `terragrunt.hcl` so the stack can be run with Terragrunt instead of plain Terraform. This is an experimental feature and should not be used in production.",
+      "default": {
+        "Enable": false
+      },
+      "properties": {
+        "Enable": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "Enable"
+      ]
+    },
+    "load-balancing-alb-data.Terragrunt.Enable": {
+      "type": "boolean",
+      "description": "Override single parameter of load-balancing-alb-data.Terragrunt",
+      "default": false
+    }
+  },
+  "required": [
+    "StackName",
+    "load-balancing-alb-data.StackName"
+  ]
+}
